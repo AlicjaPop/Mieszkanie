@@ -12,5 +12,9 @@ dep_periods=np.arange(1,dep_nper+1,dtype=int)
 prop_periods=np.arange(1,prop_nper+1,dtype=int)
 
 prop_price_future=np.around(-npf.fv(prop_rate, prop_nper, 0, 120000),2)
-print(prop_price_future)
+
 #Przyszła wartość mieszkania to 153 153.79 zł
+
+pmt=np.around(npf.pmt(dep_rate,dep_nper,0,-prop_price_future),2)
+
+#Co miesiąc należy wpłacać ok. 1875,28 zł, aby uzbierać na mieszkanie w ciągu 5 lat
