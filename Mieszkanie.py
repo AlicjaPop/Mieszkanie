@@ -1,20 +1,24 @@
 import numpy as np
 import numpy_financial as npf
+import matplotlib.pyplot as plt
 
 prop_price_init=120000
-prop_rate=0.05
+prop_rate=0.05/12
 dep_rate=0.12/12
 time=5
-dep_nper=12*time
-prop_nper=1*time
+nper=12*time
 
-dep_periods=np.arange(1,dep_nper+1,dtype=int)
-prop_periods=np.arange(1,prop_nper+1,dtype=int)
 
-prop_price_future=np.around(-npf.fv(prop_rate, prop_nper, 0, 120000),2)
+periods=np.arange(1,nper+1,dtype=int)
+prop_price_future=np.around(-npf.fv(prop_rate, nper, 0, prop_price_init),2)
 
-#Przyszła wartość mieszkania to 153 153.79 zł
+dep_pmt=np.around(npf.pmt(dep_rate,nper,0,-prop_price_future),2)
 
-pmt=np.around(npf.pmt(dep_rate,dep_nper,0,-prop_price_future),2)
+dep_value_in_time=np.around(npf.fv(dep_rate, periods, -dep_pmt, 0),2)
+prop_value_in_time=np.around(prop_price_init*(1+prop_rate)**(periods),2)
 
-#Co miesiąc należy wpłacać ok. 1875,28 zł, aby uzbierać na mieszkanie w ciągu 5 lat
+plt.plot(dep_value_in_time,label='wartość lokaty')
+plt.plot(prop_value_in_time,label='wartość mieszkania')
+plt.legend()
+plt.xlabel('Liczba okresów')
+plt.ylabel('Wartość')
